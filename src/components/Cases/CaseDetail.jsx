@@ -13,11 +13,11 @@ function CaseDetail({ onNavigate }) {
           {/* Breadcrumbs */}
           <div className="text-xs md:text-sm text-gray-600">
             <span className="hover:text-gray-900 cursor-pointer">Dashboard</span>
-            <span className="mx-2">></span>
+            <span className="mx-2">&gt;</span>
             <span className="hover:text-gray-900 cursor-pointer">Cases</span>
-            <span className="mx-2">></span>
+            <span className="mx-2">&gt;</span>
             <span className="hover:text-gray-900 cursor-pointer">MRG-2025-112</span>
-            <span className="mx-2">></span>
+            <span className="mx-2">&gt;</span>
             <span className="text-gray-900 font-medium">Proof Narrative</span>
           </div>
 

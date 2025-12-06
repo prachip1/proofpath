@@ -44,14 +44,14 @@ function NewCase({ onNavigate }) {
             >
               Dashboard
             </span>
-            <span className="mx-2">></span>
+            <span className="mx-2">&gt;</span>
             <span 
               className="hover:text-gray-900 cursor-pointer"
               onClick={() => onNavigate && onNavigate('Cases')}
             >
               Cases
             </span>
-            <span className="mx-2">></span>
+            <span className="mx-2">&gt;</span>
             <span className="text-gray-900 font-medium">New Case</span>
           </div>
 
