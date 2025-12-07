@@ -38,7 +38,7 @@ function MobileHeader({ onLogout }) {
                   </div>
                   <div>
                     <p className="text-white font-medium text-sm">Sophie</p>
-                    <p className="text-gray-400 text-xs">sophie@proofpath.com</p>
+                    <p className="text-gray-400 text-xs">mendonce@proofpathai.co.uk</p>
                   </div>
                 </div>
               </div>
