@@ -1,14 +1,58 @@
+import { useState, useEffect } from 'react'
 import Sidebar from '../Sidebar'
 import MobileBottomNav from '../MobileBottomNav'
 import MobileHeader from '../MobileHeader'
 
 function Cases({ onNavigate, onCaseClick, onLogout }) {
-  const recentCases = [
+  // Default cases (fallback)
+  const defaultCases = [
     { id: '#123456', applicant: 'Eleanor Smith', submitted: 'Oct 23, 2023', status: 'Completed' },
     { id: '#123455', applicant: 'Benjamin Brown', submitted: 'Oct 20, 2023', status: 'In review' },
     { id: '#123454', applicant: 'Mohammed Ahmed', submitted: 'Oct 19, 2023', status: 'Pending' },
     { id: '#123453', applicant: 'Sophie Wilson', submitted: 'Oct 18, 2023', status: 'Completed' },
   ]
+
+  const [recentCases, setRecentCases] = useState(defaultCases)
+
+  // Load cases from localStorage
+  const loadCases = () => {
+    try {
+      const savedCases = JSON.parse(localStorage.getItem('cases') || '[]')
+      if (savedCases.length > 0) {
+        // Merge saved cases with default cases, prioritizing saved cases
+        // Remove duplicates based on ID and combine
+        const allCases = [...savedCases, ...defaultCases]
+        const uniqueCases = allCases.filter((caseItem, index, self) =>
+          index === self.findIndex((c) => c.id === caseItem.id)
+        )
+        setRecentCases(uniqueCases)
+      } else {
+        setRecentCases(defaultCases)
+      }
+    } catch (error) {
+      console.error('Error loading cases from localStorage:', error)
+      setRecentCases(defaultCases)
+    }
+  }
+
+  // Load cases on component mount
+  useEffect(() => {
+    loadCases()
+  }, [])
+
+  // Listen for storage changes (for multi-tab support)
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === 'cases') {
+        loadCases()
+      }
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+    }
+  }, [])
 
   const getStatusBadgeStyle = () => {
     return { backgroundColor: '#003935', color: 'white' }

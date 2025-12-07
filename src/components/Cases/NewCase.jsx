@@ -3,6 +3,27 @@ import Sidebar from '../Sidebar'
 import MobileBottomNav from '../MobileBottomNav'
 import MobileHeader from '../MobileHeader'
 
+// Utility function to generate unique case ID
+const generateCaseId = () => {
+  const timestamp = Date.now()
+  const random = Math.floor(Math.random() * 1000)
+  return `#${timestamp.toString().slice(-6)}${random.toString().padStart(3, '0')}`
+}
+
+// Utility function to format date
+const formatDate = (date) => {
+  const d = new Date(date)
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  return `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`
+}
+
+// Utility function to save case to localStorage
+const saveCaseToStorage = (caseData) => {
+  const existingCases = JSON.parse(localStorage.getItem('cases') || '[]')
+  existingCases.unshift(caseData) // Add new case at the beginning
+  localStorage.setItem('cases', JSON.stringify(existingCases))
+}
+
 function NewCase({ onNavigate, onLogout }) {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -27,6 +48,56 @@ function NewCase({ onNavigate, onLogout }) {
       ...prev,
       [name]: value,
     }))
+  }
+
+  const handleSaveAndExit = () => {
+    // Validate required fields
+    if (!formData.firstName || !formData.lastName || !formData.email) {
+      alert('Please fill in at least First Name, Last Name, and Email before saving.')
+      return
+    }
+
+    // Create case object
+    const newCase = {
+      id: generateCaseId(),
+      applicant: `${formData.firstName} ${formData.lastName}`,
+      submitted: formatDate(new Date()),
+      status: 'Pending',
+      formData: formData, // Store full form data for future use
+    }
+
+    // Save to localStorage
+    saveCaseToStorage(newCase)
+
+    // Navigate to Cases page
+    if (onNavigate) {
+      onNavigate('Cases')
+    }
+  }
+
+  const handleContinue = () => {
+    // Validate required fields
+    if (!formData.firstName || !formData.lastName || !formData.email) {
+      alert('Please fill in at least First Name, Last Name, and Email before continuing.')
+      return
+    }
+
+    // Create case object
+    const newCase = {
+      id: generateCaseId(),
+      applicant: `${formData.firstName} ${formData.lastName}`,
+      submitted: formatDate(new Date()),
+      status: 'In review',
+      formData: formData, // Store full form data for future use
+    }
+
+    // Save to localStorage
+    saveCaseToStorage(newCase)
+
+    // Navigate to next step (for now, just go to Cases)
+    if (onNavigate) {
+      onNavigate('Cases')
+    }
   }
 
   return (
@@ -263,12 +334,14 @@ function NewCase({ onNavigate, onLogout }) {
             <div className="flex flex-col sm:flex-row justify-end gap-3 md:gap-4">
               <button
                 type="button"
+                onClick={handleSaveAndExit}
                 className="w-full sm:w-auto px-4 md:px-6 py-2 text-sm md:text-base border border-gray-300 rounded-md text-gray-700 font-medium hover:bg-gray-50 transition-colors"
               >
                 Save & Exit
               </button>
               <button
                 type="button"
+                onClick={handleContinue}
                 className="w-full sm:w-auto px-4 md:px-6 py-2 text-sm md:text-base rounded-md text-white font-medium transition-colors"
                 style={{ backgroundColor: '#1A363A' }}
               >

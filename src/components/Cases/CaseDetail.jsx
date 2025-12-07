@@ -1,8 +1,64 @@
+import { useState, useEffect } from 'react'
 import Sidebar from '../Sidebar'
 import MobileHeader from '../MobileHeader'
 import { HiBell } from 'react-icons/hi'
 
-function CaseDetail({ onNavigate, onLogout }) {
+function CaseDetail({ caseId, onNavigate, onLogout }) {
+  const [caseData, setCaseData] = useState(null)
+
+  // Load case data from localStorage
+  useEffect(() => {
+    const loadCaseData = () => {
+      try {
+        const savedCases = JSON.parse(localStorage.getItem('cases') || '[]')
+        const foundCase = savedCases.find(c => c.id === caseId)
+        
+        if (foundCase) {
+          setCaseData(foundCase)
+        } else {
+          // If case not found in saved cases, create a default case object
+          // This handles default cases that might not be in localStorage
+          setCaseData({
+            id: caseId || '#123456',
+            applicant: 'Unknown',
+            submitted: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+            status: 'Pending',
+            formData: {}
+          })
+        }
+      } catch (error) {
+        console.error('Error loading case data:', error)
+        setCaseData({
+          id: caseId || '#123456',
+          applicant: 'Unknown',
+          submitted: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+          status: 'Pending',
+          formData: {}
+        })
+      }
+    }
+
+    loadCaseData()
+  }, [caseId])
+
+  // Get borrower name from case data
+  const getBorrowerName = () => {
+    if (!caseData) return 'Unknown'
+    
+    // First try to get from formData (for newly created cases)
+    if (caseData.formData?.firstName && caseData.formData?.lastName) {
+      return `${caseData.formData.firstName} ${caseData.formData.lastName}`
+    }
+    
+    // Fall back to applicant field (for existing/default cases)
+    return caseData.applicant || 'Unknown'
+  }
+  
+  const borrowerName = getBorrowerName()
+
+  // Get case ID for display
+  const displayCaseId = caseData?.id || caseId || 'MRG-2025-112'
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar activeItem="Cases" onNavigate={onNavigate} onLogout={onLogout} />
@@ -16,11 +72,21 @@ function CaseDetail({ onNavigate, onLogout }) {
         <div className="bg-white border-b border-gray-200 px-4 md:px-8 py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           {/* Breadcrumbs */}
           <div className="text-xs md:text-sm text-gray-600">
-            <span className="hover:text-gray-900 cursor-pointer">Dashboard</span>
+            <span 
+              className="hover:text-gray-900 cursor-pointer"
+              onClick={() => onNavigate && onNavigate('Dashboard')}
+            >
+              Dashboard
+            </span>
             <span className="mx-2">&gt;</span>
-            <span className="hover:text-gray-900 cursor-pointer">Cases</span>
+            <span 
+              className="hover:text-gray-900 cursor-pointer"
+              onClick={() => onNavigate && onNavigate('Cases')}
+            >
+              Cases
+            </span>
             <span className="mx-2">&gt;</span>
-            <span className="hover:text-gray-900 cursor-pointer">MRG-2025-112</span>
+            <span className="hover:text-gray-900 cursor-pointer">{displayCaseId}</span>
             <span className="mx-2">&gt;</span>
             <span className="text-gray-900 font-medium">Proof Narrative</span>
           </div>
@@ -78,12 +144,24 @@ function CaseDetail({ onNavigate, onLogout }) {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Borrower Name:</span>
-                    <span className="text-gray-900 font-medium">John Doe</span>
+                    <span className="text-gray-900 font-medium">{borrowerName}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Mortgage Application Ref:</span>
-                    <span className="text-gray-900 font-medium">MRG-2025-112</span>
+                    <span className="text-gray-900 font-medium">{displayCaseId}</span>
                   </div>
+                  {caseData?.formData?.email && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Email:</span>
+                      <span className="text-gray-900 font-medium">{caseData.formData.email}</span>
+                    </div>
+                  )}
+                  {caseData?.formData?.phone && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Phone:</span>
+                      <span className="text-gray-900 font-medium">{caseData.formData.phone}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between">
                     <span className="text-gray-600">Broker:</span>
                     <span className="text-gray-900 font-medium">PrimeHome Mortgages Ltd</span>
@@ -101,12 +179,8 @@ function CaseDetail({ onNavigate, onLogout }) {
                     <span className="text-gray-900 font-medium">ABC</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Broker:</span>
-                    <span className="text-gray-900 font-medium">Prime</span>
-                  </div>
-                  <div className="flex justify-between">
                     <span className="text-gray-600">Date Generated:</span>
-                    <span className="text-gray-900 font-medium">17 Nov 2025</span>
+                    <span className="text-gray-900 font-medium">{caseData?.submitted || 'N/A'}</span>
                   </div>
                 </div>
               </div>

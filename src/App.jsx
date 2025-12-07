@@ -22,7 +22,9 @@ function App() {
   const [currentPage, setCurrentPage] = useState(() => {
     return localStorage.getItem('currentPage') || 'Dashboard'
   })
-  const [selectedCaseId, setSelectedCaseId] = useState(null)
+  const [selectedCaseId, setSelectedCaseId] = useState(() => {
+    return localStorage.getItem('selectedCaseId') || null
+  })
 
   // Save state to localStorage whenever it changes
   useEffect(() => {
@@ -42,6 +44,14 @@ function App() {
       localStorage.setItem('currentPage', currentPage)
     }
   }, [currentPage])
+
+  useEffect(() => {
+    if (selectedCaseId) {
+      localStorage.setItem('selectedCaseId', selectedCaseId)
+    } else {
+      localStorage.removeItem('selectedCaseId')
+    }
+  }, [selectedCaseId])
 
   const handleSignIn = (role) => {
     setUserRole(role)
@@ -71,7 +81,7 @@ function App() {
   // Broker navigation
   if (isAuthenticated && userRole === 'Broker') {
     if (currentPage === 'CaseDetail') {
-      return <CaseDetail onNavigate={handleNavigate} onLogout={handleLogout} />
+      return <CaseDetail caseId={selectedCaseId} onNavigate={handleNavigate} onLogout={handleLogout} />
     }
     
     switch (currentPage) {
