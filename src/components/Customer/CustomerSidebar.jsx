@@ -1,9 +1,7 @@
 import { useState } from 'react'
-import { HiMenu, HiX } from 'react-icons/hi'
 
 function CustomerSidebar({ activeItem = 'Dashboard' }) {
   const [active, setActive] = useState(activeItem)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const menuItems = [
     // Menu items will be decided later - placeholder for now
@@ -12,24 +10,12 @@ function CustomerSidebar({ activeItem = 'Dashboard' }) {
 
   const handleClick = (itemId) => {
     setActive(itemId)
-    setIsMobileMenuOpen(false)
   }
 
   return (
     <>
-      {/* Mobile Menu Button */}
-      <button
-        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="md:hidden fixed top-4 left-4 z-50 p-2 rounded-lg text-white"
-        style={{ backgroundColor: '#001F24' }}
-      >
-        {isMobileMenuOpen ? <HiX className="w-6 h-6" /> : <HiMenu className="w-6 h-6" />}
-      </button>
-
-      {/* Sidebar */}
-      <div className={`fixed left-0 top-0 w-64 h-screen flex flex-col transform transition-transform duration-300 ease-in-out z-40 ${
-        isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-      }`} style={{ backgroundColor: '#001F24' }}>
+      {/* Sidebar - Hidden on mobile, visible on desktop */}
+      <div className="hidden md:flex fixed left-0 top-0 w-64 h-screen flex-col z-40" style={{ backgroundColor: '#001F24' }}>
         {/* Brand/Logo Section */}
         <div className="p-6">
           <h1 className="text-2xl font-semibold text-white">proofpath</h1>
@@ -68,14 +54,6 @@ function CustomerSidebar({ activeItem = 'Dashboard' }) {
           </div>
         </div>
       </div>
-
-      {/* Mobile Overlay */}
-      {isMobileMenuOpen && (
-        <div
-          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
-      )}
     </>
   )
 }
