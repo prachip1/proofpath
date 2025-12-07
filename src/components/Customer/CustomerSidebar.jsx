@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function CustomerSidebar({ activeItem = 'Dashboard' }) {
+function CustomerSidebar({ activeItem = 'Dashboard', onLogout }) {
   const [active, setActive] = useState(activeItem)
 
   const menuItems = [
@@ -47,7 +47,14 @@ function CustomerSidebar({ activeItem = 'Dashboard' }) {
             </div>
             <div>
               <p className="text-white font-medium">User</p>
-              <button className="text-gray-400 hover:text-gray-300 text-sm">
+              <button 
+                onClick={() => {
+                  if (onLogout) {
+                    onLogout()
+                  }
+                }}
+                className="text-gray-400 hover:text-gray-300 text-sm"
+              >
                 Logout
               </button>
             </div>

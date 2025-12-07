@@ -94,7 +94,7 @@ function App() {
 
   // Customer navigation
   if (isAuthenticated && userRole === 'Customer') {
-    return <Customer />
+    return <Customer onLogout={handleLogout} />
   }
 
   // All Images route (accessible without authentication)

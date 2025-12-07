@@ -5,7 +5,7 @@ import CustomerSidebar from './CustomerSidebar'
 import MobileHeader from '../MobileHeader'
 import CustomerMobileBottomNav from './CustomerMobileBottomNav'
 
-function SelectAccount() {
+function SelectAccount({ onLogout }) {
   const [selectedAccount, setSelectedAccount] = useState('0974')
   const [showVerifyAccount, setShowVerifyAccount] = useState(false)
   const [showAccountConnected, setShowAccountConnected] = useState(false)
@@ -27,16 +27,16 @@ function SelectAccount() {
   }
 
   if (showAccountConnected) {
-    return <AccountConnected />
+    return <AccountConnected onLogout={onLogout} />
   }
 
   return (
     <>
       <div className="flex min-h-screen overflow-x-hidden w-full" style={{ backgroundColor: '#152E32' }}>
-        <CustomerSidebar />
+        <CustomerSidebar onLogout={onLogout} />
         
         {/* Mobile Header */}
-        <MobileHeader />
+        <MobileHeader onLogout={onLogout} />
         
         {/* Main Content Area */}
         <div className="flex-1 pt-16 md:pt-0 md:ml-64 flex items-center justify-center p-4 md:p-8 pb-20 md:pb-8">

@@ -4,7 +4,7 @@ import MobileHeader from '../MobileHeader'
 
 function Reports({ onNavigate, onLogout }) {
   return (
-    <div className="flex min-h-screen" style={{ background: 'linear-gradient(to right, #152E32 0%, #1A3A3F 50%, #152E32 100%)' }}>
+    <div className="flex min-h-screen overflow-x-hidden w-full" style={{ background: 'linear-gradient(to right, #01151C 0%, #002025 50%, #01151C 100%)' }}>
       <Sidebar activeItem="Reports" onNavigate={onNavigate} onLogout={onLogout} />
       
       {/* Mobile Header */}
