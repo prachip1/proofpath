@@ -1,10 +1,14 @@
 import Sidebar from '../Sidebar'
+import MobileHeader from '../MobileHeader'
 import { HiBell } from 'react-icons/hi'
 
-function CaseDetail({ onNavigate }) {
+function CaseDetail({ onNavigate, onLogout }) {
   return (
     <div className="flex min-h-screen bg-gray-50">
-      <Sidebar activeItem="Cases" onNavigate={onNavigate} />
+      <Sidebar activeItem="Cases" onNavigate={onNavigate} onLogout={onLogout} />
+      
+      {/* Mobile Header */}
+      <MobileHeader onLogout={onLogout} />
       
       {/* Main Content Area */}
       <div className="flex-1 mt-16 md:mt-0 md:ml-64 flex flex-col">

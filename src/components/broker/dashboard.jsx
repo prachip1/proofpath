@@ -1,6 +1,8 @@
 import Sidebar from '../Sidebar'
+import MobileBottomNav from '../MobileBottomNav'
+import MobileHeader from '../MobileHeader'
 
-function Dashboard({ onNavigate, onCaseClick }) {
+function Dashboard({ onNavigate, onCaseClick, onLogout }) {
   const recentCases = [
     { id: '#123456', applicant: 'Eleanor Smith', submitted: 'Oct 23, 2023', status: 'Completed' },
     { id: '#123455', applicant: 'Benjamin Brown', submitted: 'Oct 20, 2023', status: 'In review' },
@@ -13,51 +15,61 @@ function Dashboard({ onNavigate, onCaseClick }) {
   }
 
   return (
-    <div className="flex min-h-screen" style={{ background: 'linear-gradient(to right, #01151C 0%, #002025 50%, #01151C 100%)' }}>
-      <Sidebar activeItem="Dashboard" onNavigate={onNavigate} />
+    <div className="flex min-h-screen overflow-x-hidden w-full" style={{ background: 'linear-gradient(to right, #01151C 0%, #002025 50%, #01151C 100%)' }}>
+      <Sidebar activeItem="Dashboard" onNavigate={onNavigate} onLogout={onLogout} />
+      
+      {/* Mobile Header */}
+      <MobileHeader onLogout={onLogout} />
       
       {/* Main Content Area */}
-      <div className="flex-1 p-4 md:p-8 mt-16 md:mt-0 md:ml-64">
+      <div className="flex flex-col mt-8 flex-1 min-w-0 w-full pt-16 md:pt-0 md:ml-64 px-4 md:px-6 lg:px-8 pb-20 md:pb-6 lg:pb-8 overflow-x-hidden">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Portfolio Summary</h1>
-          <p className="text-gray-400">Source-of-funds verification at a glance</p>
+        <div className="mb-4 md:mb-8">
+          <h1 className="text-lg md:text-4xl font-bold text-white mb-1 md:mb-2 leading-tight break-words">Portfolio Summary</h1>
+          <p className="text-xs md:text-base text-gray-400 leading-relaxed break-words">Source-of-funds verification at a glance</p>
         </div>
 
-        {/* Summary Metrics and Chart Row */}
-        <div className="flex flex-col lg:flex-row gap-6 mb-8">
-          {/* Summary Cards */}
-          <div className="flex-1 flex flex-col sm:flex-row gap-4">
-            <div className="flex-1 flex flex-col gap-4">
-              <div className="rounded-lg p-6 h-40 flex flex-col justify-start items-start" style={{ backgroundColor: '#01242A' }}>
-                <p className="text-gray-400 text-lg mb-1">Total cases</p>
-                <p className="text-4xl md:text-5xl font-bold text-white">128</p>
+        {/* First Row: All Metrics and Chart Side by Side */}
+        <div className="flex flex-col md:flex-row gap-3 md:gap-4 mb-4 md:mb-6 w-full">
+          {/* Left Column: 4 Metrics Cards + Pending Reviews */}
+          <div className="flex-1 flex flex-col gap-3 md:gap-4">
+            {/* First Row: 4 Metrics Cards */}
+            <div className="flex flex-col md:flex-row gap-3 md:gap-4">
+              {/* Total Cases */}
+              <div className="flex-1 rounded-lg p-4 md:p-6 min-h-[100px] md:h-40 flex flex-col justify-start items-start" style={{ backgroundColor: '#01242A' }}>
+                <p className="text-gray-400 text-sm md:text-lg mb-1 leading-tight">Total cases</p>
+                <p className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-none">128</p>
               </div>
-              {/* Pending Reviews Card */}
-              <div className="rounded-lg p-6 flex items-start justify-start h-20 w-full" style={{ backgroundColor: '#01242A' }}>
-                <div className='flex justify-between w-[20em]'>
-                  <p className="text-gray-400 text-lg mb-1">Pending reviews</p>
-                  <p className="text-3xl font-bold text-white">4</p>
-                </div>
+              
+              {/* Low Risk */}
+              <div className="flex-1 rounded-lg p-4 md:p-6 min-h-[100px] md:h-40 flex flex-col justify-start items-start" style={{ backgroundColor: '#01242A' }}>
+                <p className="text-gray-400 text-sm md:text-lg mb-1 leading-tight">Low risk</p>
+                <p className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-none">85</p>
+              </div>
+              
+              {/* Medium Risk */}
+              <div className="flex-1 rounded-lg p-4 md:p-6 min-h-[100px] md:h-40 flex flex-col justify-start items-start" style={{ backgroundColor: '#01242A' }}>
+                <p className="text-gray-400 text-sm md:text-lg mb-1 leading-tight">Medium risk</p>
+                <p className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-none">27</p>
+              </div>
+              
+              {/* High Risk */}
+              <div className="flex-1 rounded-lg p-4 md:p-6 min-h-[100px] md:h-40 flex flex-col justify-start items-start" style={{ backgroundColor: '#01242A' }}>
+                <p className="text-gray-400 text-sm md:text-lg mb-1 leading-tight">High risk</p>
+                <p className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-none">16</p>
               </div>
             </div>
-            <div className="flex-1 rounded-lg p-6 h-40 flex flex-col justify-start items-start" style={{ backgroundColor: '#01242A' }}>
-              <p className="text-gray-400 text-lg mb-1">Low risk</p>
-              <p className="text-4xl md:text-5xl font-bold text-white">85</p>
-            </div>
-            <div className="flex-1 rounded-lg p-6 h-40 flex flex-col justify-start items-start" style={{ backgroundColor: '#01242A' }}>
-              <p className="text-gray-400 text-lg mb-1">Medium risk</p>
-              <p className="text-4xl md:text-5xl font-bold text-white">27</p>
-            </div>
-            <div className="flex-1 rounded-lg p-6 h-40 flex flex-col justify-start items-start" style={{ backgroundColor: '#01242A' }}>
-              <p className="text-gray-400 text-lg mb-1">High risk</p>
-              <p className="text-4xl md:text-5xl font-bold text-white">16</p>
+
+            {/* Second Row: Pending Reviews */}
+            <div className="rounded-lg p-4 md:p-6 min-h-[80px] md:h-24 flex items-center justify-between" style={{ backgroundColor: '#01242A' }}>
+              <p className="text-gray-400 text-sm md:text-lg whitespace-nowrap">Pending reviews</p>
+              <p className="text-2xl md:text-3xl font-bold text-white ml-2">4</p>
             </div>
           </div>
 
-          {/* Risk Donut Chart */}
-          <div className="w-full lg:w-64 rounded-lg p-6 flex flex-col items-center justify-center" style={{ backgroundColor: '#01242A' }}>
-            <div className="relative w-48 h-48 mb-4">
+          {/* Right Column: Risk Donut Chart */}
+          <div className="flex-1 lg:flex-none lg:w-64 rounded-lg p-4 md:p-6 flex flex-col items-center justify-center" style={{ backgroundColor: '#01242A' }}>
+            <div className="relative w-40 h-40 md:w-48 md:h-48 mb-4">
               <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
                 {/* Low risk - 66% */}
                 <circle
@@ -97,24 +109,24 @@ function Dashboard({ onNavigate, onCaseClick }) {
                 <span className="text-white font-semibold text-lg">Risk</span>
               </div>
             </div>
-            <div className="space-y-3 w-full">
-              <div className="flex items-center justify-between text-sm">
+            <div className="space-y-2 md:space-y-3 w-full">
+              <div className="flex items-center justify-between text-xs md:text-sm">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-teal-400"></div>
+                  <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-teal-400"></div>
                   <span className="text-gray-300">Low</span>
                 </div>
                 <span className="text-white font-medium">66%</span>
               </div>
-              <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center justify-between text-xs md:text-sm">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-teal-600"></div>
+                  <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-teal-600"></div>
                   <span className="text-gray-300">Medium</span>
                 </div>
                 <span className="text-white font-medium">21%</span>
               </div>
-              <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center justify-between text-xs md:text-sm">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-teal-700"></div>
+                  <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-teal-700"></div>
                   <span className="text-gray-300">High</span>
                 </div>
                 <span className="text-white font-medium">13%</span>
@@ -124,16 +136,16 @@ function Dashboard({ onNavigate, onCaseClick }) {
         </div>
 
         {/* Recent Cases Table */}
-        <div className="rounded-lg p-6" style={{ backgroundColor: '#01242A' }}>
-          <h2 className="text-2xl font-bold text-white mb-6">Recent Cases</h2>
-          <div className="overflow-x-auto">
-            <table className="w-full">
+        <div className="rounded-lg p-4 md:p-6" style={{ backgroundColor: '#01242A' }}>
+          <h2 className="text-xl md:text-2xl font-bold text-white mb-4 md:mb-6">Recent Cases</h2>
+          <div className="overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
+            <table className="w-full min-w-[600px] md:min-w-0">
               <thead>
                 <tr className="border-b" style={{ borderColor: '#1E3A3F' }}>
-                  <th className="text-left py-3 px-4 text-gray-400 font-medium">Case ID</th>
-                  <th className="text-left py-3 px-4 text-gray-400 font-medium">Applicant</th>
-                  <th className="text-left py-3 px-4 text-gray-400 font-medium">Submitted</th>
-                  <th className="text-left py-3 px-4 text-gray-400 font-medium">Status</th>
+                  <th className="text-left py-2 md:py-3 px-2 md:px-4 text-gray-400 font-medium text-xs md:text-sm">Case ID</th>
+                  <th className="text-left py-2 md:py-3 px-2 md:px-4 text-gray-400 font-medium text-xs md:text-sm">Applicant</th>
+                  <th className="text-left py-2 md:py-3 px-2 md:px-4 text-gray-400 font-medium text-xs md:text-sm">Submitted</th>
+                  <th className="text-left py-2 md:py-3 px-2 md:px-4 text-gray-400 font-medium text-xs md:text-sm">Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -141,14 +153,14 @@ function Dashboard({ onNavigate, onCaseClick }) {
                   <tr 
                     key={index} 
                     onClick={() => onCaseClick && onCaseClick(caseItem.id)}
-                    className="border-b last:border-0 cursor-pointer hover:opacity-80 transition-opacity" 
+                    className="border-b last:border-0 cursor-pointer active:opacity-70 md:hover:opacity-80 transition-opacity touch-manipulation" 
                     style={{ borderColor: '#1E3A3F', backgroundColor: '#01242A' }}
                   >
-                    <td className="py-4 px-4 text-white">{caseItem.id}</td>
-                    <td className="py-4 px-4 text-white">{caseItem.applicant}</td>
-                    <td className="py-4 px-4 text-white">{caseItem.submitted}</td>
-                    <td className="py-4 px-4">
-                      <span className="px-3 py-1 rounded-full text-xs font-medium text-white" style={getStatusBadgeStyle()}>
+                    <td className="py-3 md:py-4 px-2 md:px-4 text-white text-sm md:text-base">{caseItem.id}</td>
+                    <td className="py-3 md:py-4 px-2 md:px-4 text-white text-sm md:text-base">{caseItem.applicant}</td>
+                    <td className="py-3 md:py-4 px-2 md:px-4 text-white text-sm md:text-base">{caseItem.submitted}</td>
+                    <td className="py-3 md:py-4 px-2 md:px-4">
+                      <span className="px-2 md:px-3 py-1 rounded-full text-xs font-medium text-white" style={getStatusBadgeStyle()}>
                         {caseItem.status}
                       </span>
                     </td>
@@ -159,6 +171,9 @@ function Dashboard({ onNavigate, onCaseClick }) {
           </div>
         </div>
       </div>
+      
+      {/* Mobile Bottom Navigation */}
+      <MobileBottomNav activeItem="Dashboard" onNavigate={onNavigate} />
     </div>
   )
 }

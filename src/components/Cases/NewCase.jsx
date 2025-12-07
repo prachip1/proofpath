@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import Sidebar from '../Sidebar'
+import MobileBottomNav from '../MobileBottomNav'
+import MobileHeader from '../MobileHeader'
 
-function NewCase({ onNavigate }) {
+function NewCase({ onNavigate, onLogout }) {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -15,9 +17,8 @@ function NewCase({ onNavigate }) {
 
   const steps = [
     { number: 1, label: 'Borrower Details', active: true },
-    { number: 2, label: 'Property & Loan', active: false },
-    { number: 3, label: 'Bank Connection', active: false },
-    { number: 4, label: 'Review & Submit', active: false },
+    { number: 2, label: 'Bank Connection', active: false },
+    { number: 3, label: 'Review & Submit', active: false },
   ]
 
   const handleInputChange = (e) => {
@@ -29,48 +30,51 @@ function NewCase({ onNavigate }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <Sidebar activeItem="NewCase" onNavigate={onNavigate} />
+    <div className="flex min-h-screen bg-gray-50 overflow-x-hidden w-full">
+      <Sidebar activeItem="NewCase" onNavigate={onNavigate} onLogout={onLogout} />
+      
+      {/* Mobile Header */}
+      <MobileHeader onLogout={onLogout} />
       
       {/* Main Content Area */}
-      <div className="flex-1 mt-16 md:mt-0 md:ml-64 flex flex-col">
+      <div className="flex-1 pt-16 md:pt-0 md:ml-64 flex flex-col min-w-0 w-full pb-20 md:pb-0">
         {/* Top Bar */}
-        <div className="bg-white border-b border-gray-200 px-4 md:px-8 py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="bg-white border-b border-gray-200 px-4 md:px-6 lg:px-8 py-3 md:py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4">
           {/* Breadcrumbs */}
-          <div className="text-xs md:text-sm text-gray-600">
+          <div className="text-xs md:text-sm text-gray-600 break-words">
             <span 
               className="hover:text-gray-900 cursor-pointer"
               onClick={() => onNavigate && onNavigate('Dashboard')}
             >
               Dashboard
             </span>
-            <span className="mx-2">&gt;</span>
+            <span className="mx-1 md:mx-2">&gt;</span>
             <span 
               className="hover:text-gray-900 cursor-pointer"
               onClick={() => onNavigate && onNavigate('Cases')}
             >
               Cases
             </span>
-            <span className="mx-2">&gt;</span>
+            <span className="mx-1 md:mx-2">&gt;</span>
             <span className="text-gray-900 font-medium">New Case</span>
           </div>
 
           {/* User Actions */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             {/* Notification Bell */}
-            <button className="text-gray-600 hover:text-gray-900">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <button className="text-gray-600 hover:text-gray-900 p-1">
+              <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
               </svg>
             </button>
 
             {/* User Profile */}
-            <div className="flex items-center gap-2 cursor-pointer">
-              <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 font-semibold">
+            <div className="flex items-center gap-1.5 md:gap-2 cursor-pointer">
+              <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 font-semibold text-sm md:text-base">
                 S
               </div>
-              <span className="text-gray-700 font-medium">Sophie</span>
-              <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <span className="text-gray-700 font-medium text-sm md:text-base hidden sm:inline">Sophie</span>
+              <svg className="w-3 h-3 md:w-4 md:h-4 text-gray-600 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </div>
@@ -78,15 +82,15 @@ function NewCase({ onNavigate }) {
         </div>
 
         {/* Main Form Content */}
-        <div className="flex-1 bg-white p-8">
+        <div className="flex-1 bg-white p-4 md:p-6 lg:p-8 overflow-x-hidden">
           {/* Step Indicator */}
-          <div className="mb-8">
-            <div className="flex items-center gap-4">
+          <div className="mb-6 md:mb-8 overflow-x-auto">
+            <div className="flex items-center gap-2 md:gap-4 min-w-max md:min-w-0">
               {steps.map((step, index) => (
-                <div key={step.number} className="flex items-center">
+                <div key={step.number} className="flex items-center flex-shrink-0">
                   <div className="flex items-center">
                     <div
-                      className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
+                      className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-semibold text-sm md:text-base ${
                         step.active
                           ? 'bg-green-600 text-white'
                           : 'bg-gray-200 text-gray-600'
@@ -95,15 +99,15 @@ function NewCase({ onNavigate }) {
                       {step.number}
                     </div>
                     <span
-                      className={`ml-3 font-medium ${
+                      className={`ml-2 md:ml-3 font-medium text-xs md:text-sm lg:text-base ${
                         step.active ? 'text-gray-900' : 'text-gray-500'
-                      }`}
+                      } hidden sm:inline`}
                     >
                       {step.label}
                     </span>
                   </div>
                   {index < steps.length - 1 && (
-                    <div className="w-16 h-0.5 bg-gray-200 mx-4"></div>
+                    <div className="w-8 md:w-16 h-0.5 bg-gray-200 mx-2 md:mx-4"></div>
                   )}
                 </div>
               ))}
@@ -111,15 +115,15 @@ function NewCase({ onNavigate }) {
           </div>
 
           {/* Form Section */}
-          <div className="max-w-4xl">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Borrower Information</h2>
-            <p className="text-gray-600 mb-8">Enter the primary applicant's core identity details.</p>
+          <div className="max-w-4xl w-full">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-1 md:mb-2">Borrower Information</h2>
+            <p className="text-sm md:text-base text-gray-600 mb-6 md:mb-8">Enter the primary applicant's core identity details.</p>
 
-            {/* Form Fields - Two Columns */}
-            <div className="grid grid-cols-2 gap-6 mb-8">
+            {/* Form Fields - Responsive Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
               {/* First Name */}
               <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1.5 md:mb-2">
                   First Name
                 </label>
                 <input
@@ -128,14 +132,14 @@ function NewCase({ onNavigate }) {
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full px-3 md:px-4 py-2 text-sm md:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="Enter first name"
                 />
               </div>
 
               {/* Last Name */}
               <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1.5 md:mb-2">
                   Last Name
                 </label>
                 <input
@@ -144,14 +148,14 @@ function NewCase({ onNavigate }) {
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full px-3 md:px-4 py-2 text-sm md:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="Enter last name"
                 />
               </div>
 
               {/* Email Address */}
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5 md:mb-2">
                   Email Address
                 </label>
                 <input
@@ -160,14 +164,14 @@ function NewCase({ onNavigate }) {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full px-3 md:px-4 py-2 text-sm md:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="Enter email address"
                 />
               </div>
 
               {/* Phone Number */}
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1.5 md:mb-2">
                   Phone Number
                 </label>
                 <input
@@ -176,14 +180,14 @@ function NewCase({ onNavigate }) {
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full px-3 md:px-4 py-2 text-sm md:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="Enter phone number"
                 />
               </div>
 
               {/* Date of Birth */}
               <div>
-                <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 mb-1.5 md:mb-2">
                   Date of Birth
                 </label>
                 <input
@@ -192,13 +196,13 @@ function NewCase({ onNavigate }) {
                   name="dateOfBirth"
                   value={formData.dateOfBirth}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full px-3 md:px-4 py-2 text-sm md:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 />
               </div>
 
               {/* Nationality */}
               <div>
-                <label htmlFor="nationality" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="nationality" className="block text-sm font-medium text-gray-700 mb-1.5 md:mb-2">
                   Nationality
                 </label>
                 <input
@@ -207,14 +211,14 @@ function NewCase({ onNavigate }) {
                   name="nationality"
                   value={formData.nationality}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full px-3 md:px-4 py-2 text-sm md:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="Enter nationality"
                 />
               </div>
 
               {/* Current Address */}
-              <div className="col-span-2">
-                <label htmlFor="currentAddress" className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="md:col-span-2">
+                <label htmlFor="currentAddress" className="block text-sm font-medium text-gray-700 mb-1.5 md:mb-2">
                   Current Address
                 </label>
                 <textarea
@@ -223,14 +227,14 @@ function NewCase({ onNavigate }) {
                   value={formData.currentAddress}
                   onChange={handleInputChange}
                   rows={3}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full px-3 md:px-4 py-2 text-sm md:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="Enter current address"
                 />
               </div>
 
               {/* Employment Type */}
-              <div className="col-span-2">
-                <label htmlFor="employmentType" className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="md:col-span-2">
+                <label htmlFor="employmentType" className="block text-sm font-medium text-gray-700 mb-1.5 md:mb-2">
                   Employment Type
                 </label>
                 <select
@@ -238,7 +242,7 @@ function NewCase({ onNavigate }) {
                   name="employmentType"
                   value={formData.employmentType}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full px-3 md:px-4 py-2 text-sm md:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 >
                   <option value="">Select employment type</option>
                   <option value="full-time">Full-time</option>
@@ -251,21 +255,21 @@ function NewCase({ onNavigate }) {
             </div>
 
             {/* Privacy Statement */}
-            <p className="text-xs text-gray-500 mb-8">
+            <p className="text-xs text-gray-500 mb-6 md:mb-8">
               All personal data is encrypted at rest and processed under FCaliçered controls.
             </p>
 
             {/* Action Buttons */}
-            <div className="flex justify-end gap-4">
+            <div className="flex flex-col sm:flex-row justify-end gap-3 md:gap-4">
               <button
                 type="button"
-                className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+                className="w-full sm:w-auto px-4 md:px-6 py-2 text-sm md:text-base border border-gray-300 rounded-md text-gray-700 font-medium hover:bg-gray-50 transition-colors"
               >
                 Save & Exit
               </button>
               <button
                 type="button"
-                className="px-6 py-2 rounded-md text-white font-medium transition-colors"
+                className="w-full sm:w-auto px-4 md:px-6 py-2 text-sm md:text-base rounded-md text-white font-medium transition-colors"
                 style={{ backgroundColor: '#1A363A' }}
               >
                 Continue to Property
@@ -274,6 +278,9 @@ function NewCase({ onNavigate }) {
           </div>
         </div>
       </div>
+      
+      {/* Mobile Bottom Navigation */}
+      <MobileBottomNav activeItem="NewCase" onNavigate={onNavigate} />
     </div>
   )
 }

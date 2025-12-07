@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import SignIn from './components/auth/SignIn'
 import Dashboard from './components/broker/dashboard'
 import Cases from './components/Cases'
@@ -11,10 +11,37 @@ import Customer from './components/Customer'
 import AllImages from './components/allimages'
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [userRole, setUserRole] = useState(null)
-  const [currentPage, setCurrentPage] = useState('Dashboard')
+  // Load state from localStorage on mount
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const saved = localStorage.getItem('isAuthenticated')
+    return saved === 'true'
+  })
+  const [userRole, setUserRole] = useState(() => {
+    return localStorage.getItem('userRole') || null
+  })
+  const [currentPage, setCurrentPage] = useState(() => {
+    return localStorage.getItem('currentPage') || 'Dashboard'
+  })
   const [selectedCaseId, setSelectedCaseId] = useState(null)
+
+  // Save state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('isAuthenticated', isAuthenticated.toString())
+  }, [isAuthenticated])
+
+  useEffect(() => {
+    if (userRole) {
+      localStorage.setItem('userRole', userRole)
+    } else {
+      localStorage.removeItem('userRole')
+    }
+  }, [userRole])
+
+  useEffect(() => {
+    if (currentPage) {
+      localStorage.setItem('currentPage', currentPage)
+    }
+  }, [currentPage])
 
   const handleSignIn = (role) => {
     setUserRole(role)
@@ -32,27 +59,36 @@ function App() {
     setCurrentPage('CaseDetail')
   }
 
+  const handleLogout = () => {
+    setIsAuthenticated(false)
+    setUserRole(null)
+    setCurrentPage('Dashboard')
+    localStorage.removeItem('isAuthenticated')
+    localStorage.removeItem('userRole')
+    localStorage.removeItem('currentPage')
+  }
+
   // Broker navigation
   if (isAuthenticated && userRole === 'Broker') {
     if (currentPage === 'CaseDetail') {
-      return <CaseDetail onNavigate={handleNavigate} />
+      return <CaseDetail onNavigate={handleNavigate} onLogout={handleLogout} />
     }
     
     switch (currentPage) {
       case 'Dashboard':
-        return <Dashboard onNavigate={handleNavigate} onCaseClick={handleCaseClick} />
+        return <Dashboard onNavigate={handleNavigate} onCaseClick={handleCaseClick} onLogout={handleLogout} />
       case 'Cases':
-        return <Cases onNavigate={handleNavigate} onCaseClick={handleCaseClick} />
+        return <Cases onNavigate={handleNavigate} onCaseClick={handleCaseClick} onLogout={handleLogout} />
       case 'NewCase':
-        return <NewCase onNavigate={handleNavigate} />
+        return <NewCase onNavigate={handleNavigate} onLogout={handleLogout} />
       case 'Reports':
-        return <Reports onNavigate={handleNavigate} />
+        return <Reports onNavigate={handleNavigate} onLogout={handleLogout} />
       case 'Compliance':
-        return <Compliance onNavigate={handleNavigate} />
+        return <Compliance onNavigate={handleNavigate} onLogout={handleLogout} />
       case 'Settings':
-        return <Settings onNavigate={handleNavigate} />
+        return <Settings onNavigate={handleNavigate} onLogout={handleLogout} />
       default:
-        return <Dashboard onNavigate={handleNavigate} onCaseClick={handleCaseClick} />
+        return <Dashboard onNavigate={handleNavigate} onCaseClick={handleCaseClick} onLogout={handleLogout} />
     }
   }
 

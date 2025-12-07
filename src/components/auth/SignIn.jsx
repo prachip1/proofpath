@@ -44,9 +44,9 @@ function SignIn({ onSignIn }) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row">
+    <div className="flex flex-col h-screen w-screen md:flex-row">
       {/* Left Side - Brand Section */}
-      <div className="w-full md:w-1/2 relative overflow-hidden flex items-center justify-center min-h-[300px] md:min-h-screen" style={{ backgroundColor: '#011F2A' }}>
+      <div className="hidden lg:flex w-full md:w-1/2 relative overflow-hidden flex items-center justify-center min-h-[300px] md:min-h-screen" style={{ backgroundColor: '#011F2A' }}>
         {/* Organic wavy background pattern - Vertical strokes */}
         <div className="absolute inset-0">
           <svg className="w-full h-full" viewBox="0 0 1200 800" preserveAspectRatio="none">
@@ -93,7 +93,7 @@ function SignIn({ onSignIn }) {
       </div>
 
       {/* Right Side - Sign In Form */}
-      <div className="w-full md:w-1/2 flex items-center justify-center p-4 md:p-8" style={{ backgroundColor: '#141F24' }}>
+      <div className="w-screen h-screen md:w-1/2 flex items-center justify-center p-4 md:p-8" style={{ backgroundColor: '#141F24' }}>
         <div className="w-full max-w-md">
           <h2 className="text-3xl md:text-4xl font-semibold text-white mb-6 md:mb-8">Sign in</h2>
 

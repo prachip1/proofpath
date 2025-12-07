@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
-import { HiMenu, HiX, HiChevronDown, HiChevronRight } from 'react-icons/hi'
+import { HiChevronDown, HiChevronRight } from 'react-icons/hi'
 
-function Sidebar({ activeItem = 'Dashboard', onNavigate }) {
+function Sidebar({ activeItem = 'Dashboard', onNavigate, onLogout }) {
   const [active, setActive] = useState(activeItem)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isCasesExpanded, setIsCasesExpanded] = useState(false)
 
   useEffect(() => {
@@ -33,13 +32,11 @@ function Sidebar({ activeItem = 'Dashboard', onNavigate }) {
       setIsCasesExpanded(!isCasesExpanded)
       // Also navigate to Cases when expanding
       setActive(itemId)
-      setIsMobileMenuOpen(false)
       if (onNavigate) {
         onNavigate(itemId)
       }
     } else {
       setActive(itemId)
-      setIsMobileMenuOpen(false) // Close mobile menu on navigation
       if (onNavigate) {
         onNavigate(itemId)
       }
@@ -48,7 +45,6 @@ function Sidebar({ activeItem = 'Dashboard', onNavigate }) {
 
   const handleSubmenuClick = (itemId) => {
     setActive(itemId)
-    setIsMobileMenuOpen(false)
     if (onNavigate) {
       onNavigate(itemId)
     }
@@ -56,19 +52,8 @@ function Sidebar({ activeItem = 'Dashboard', onNavigate }) {
 
   return (
     <>
-      {/* Mobile Menu Button */}
-      <button
-        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="md:hidden fixed top-4 left-4 z-50 p-2 rounded-lg text-white"
-        style={{ backgroundColor: '#001F24' }}
-      >
-        {isMobileMenuOpen ? <HiX className="w-6 h-6" /> : <HiMenu className="w-6 h-6" />}
-      </button>
-
-      {/* Sidebar */}
-      <div className={`fixed left-0 top-0 w-64 h-screen flex flex-col transform transition-transform duration-300 ease-in-out z-40 ${
-        isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-      }`} style={{ backgroundColor: '#001F24' }}>
+      {/* Sidebar - Hidden on mobile, visible on desktop */}
+      <div className="hidden md:flex fixed left-0 top-0 w-64 h-screen flex-col z-40" style={{ backgroundColor: '#001F24' }}>
         {/* Brand/Logo Section */}
         <div className="p-6">
           <h1 className="text-2xl font-semibold text-white">proofpath</h1>
@@ -129,7 +114,10 @@ function Sidebar({ activeItem = 'Dashboard', onNavigate }) {
             </div>
             <div>
               <p className="text-white font-medium">Sophie</p>
-              <button className="text-gray-400 hover:text-gray-300 text-sm">
+              <button 
+                onClick={onLogout}
+                className="text-gray-400 hover:text-gray-300 text-sm"
+              >
                 Logout
               </button>
             </div>
@@ -137,13 +125,6 @@ function Sidebar({ activeItem = 'Dashboard', onNavigate }) {
         </div>
       </div>
 
-      {/* Mobile Overlay */}
-      {isMobileMenuOpen && (
-        <div
-          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
-      )}
     </>
   )
 }
