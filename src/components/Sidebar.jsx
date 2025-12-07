@@ -110,10 +110,11 @@ function Sidebar({ activeItem = 'Dashboard', onNavigate, onLogout }) {
         <div className="p-4">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-full bg-gray-600 flex items-center justify-center text-white font-semibold text-lg">
-              S
+              M
             </div>
             <div>
-              <p className="text-white font-medium">Sophie</p>
+              <p className="text-white font-medium">Mendonce</p>
+              <p className="text-gray-400 text-xs mt-1">mendonce@proofpathai.co.uk</p>
               <button 
                 onClick={onLogout}
                 className="text-gray-400 hover:text-gray-300 text-sm"
