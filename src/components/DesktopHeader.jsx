@@ -50,7 +50,7 @@ function DesktopHeader({ onLogout, onSearch }) {
             <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-white font-semibold text-sm">
               M
             </div>
-            <span className="text-white font-medium text-sm">John Doe</span>
+            <span className="text-white font-medium text-sm">Mendonce</span>
             <HiChevronDown className="w-4 h-4 text-gray-400" />
           </button>
           
@@ -61,15 +61,15 @@ function DesktopHeader({ onLogout, onSearch }) {
                 className="fixed inset-0 z-[45]" 
                 onClick={() => setShowDropdown(false)}
               />
-              <div className="absolute right-0 top-full mt-2 w-48 rounded-lg shadow-lg z-[100]" style={{ backgroundColor: '#01242A', border: '1px solid #1E3A3F' }}>
+              <div className="absolute right-0 top-full mt-2 w-56 rounded-lg shadow-lg z-[100]" style={{ backgroundColor: '#01242A', border: '1px solid #1E3A3F' }}>
                 <div className="p-3 border-b" style={{ borderColor: '#1E3A3F' }}>
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center text-white font-semibold">
+                    <div className="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center text-white font-semibold flex-shrink-0">
                       M
                     </div>
-                    <div>
-                      <p className="text-white font-medium text-sm">Mendonce</p>
-                      <p className="text-gray-400 text-xs">mendonce@proofpathai.co.uk</p>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-white font-medium text-sm truncate">Mendonce</p>
+                      <p className="text-gray-400 text-xs truncate break-all">mendonce@proofpathai.co.uk</p>
                     </div>
                   </div>
                 </div>
