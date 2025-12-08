@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { HiChevronDown, HiChevronRight } from 'react-icons/hi'
+import { HiChevronDown, HiChevronRight, HiHome, HiFolder, HiDocumentReport, HiChartPie, HiCog, HiPlus } from 'react-icons/hi'
 
 function Sidebar({ activeItem = 'Dashboard', onNavigate, onLogout }) {
   const [active, setActive] = useState(activeItem)
@@ -14,17 +14,18 @@ function Sidebar({ activeItem = 'Dashboard', onNavigate, onLogout }) {
   }, [activeItem])
 
   const menuItems = [
-    { id: 'Dashboard', label: 'Dashboard' },
+    { id: 'Dashboard', label: 'Dashboard', icon: HiHome },
     { 
       id: 'Cases', 
       label: 'Cases',
+      icon: HiFolder,
       submenu: [
-        { id: 'NewCase', label: 'New Case' }
+        { id: 'NewCase', label: 'New Case', icon: HiPlus }
       ]
     },
-    { id: 'Reports', label: 'Reports' },
-    { id: 'Compliance', label: 'Compliance' },
-    { id: 'Settings', label: 'Settings' },
+    { id: 'Reports', label: 'Reports', icon: HiDocumentReport },
+    { id: 'Analysis', label: 'Analysis', icon: HiChartPie },
+    { id: 'Settings', label: 'Settings', icon: HiCog },
   ]
 
   const handleClick = (itemId, hasSubmenu = false) => {
@@ -61,49 +62,59 @@ function Sidebar({ activeItem = 'Dashboard', onNavigate, onLogout }) {
 
       {/* Navigation Links Section */}
       <nav className="flex-1 px-4">
-        {menuItems.map((item) => (
-          <div key={item.id}>
-            <button
-              onClick={() => handleClick(item.id, !!item.submenu)}
-              className={`w-full text-left px-4 py-3 mb-1 rounded transition-colors flex items-center justify-between ${
-                active === item.id
-                  ? 'text-white'
-                  : 'text-white hover:opacity-80'
-              }`}
-              style={active === item.id ? { backgroundColor: '#2A4A4E' } : {}}
-            >
-              <span>{item.label}</span>
-              {item.submenu && (
-                <span className="ml-2">
-                  {isCasesExpanded ? (
-                    <HiChevronDown className="w-4 h-4" />
-                  ) : (
-                    <HiChevronRight className="w-4 h-4" />
-                  )}
-                </span>
+        {menuItems.map((item) => {
+          const Icon = item.icon
+          return (
+            <div key={item.id}>
+              <button
+                onClick={() => handleClick(item.id, !!item.submenu)}
+                className={`w-full text-left px-4 py-3 mb-1 rounded transition-colors flex items-center justify-between ${
+                  active === item.id
+                    ? 'text-white'
+                    : 'text-white hover:opacity-80'
+                }`}
+                style={active === item.id ? { backgroundColor: '#2A4A4E' } : {}}
+              >
+                <div className="flex items-center gap-3">
+                  <Icon className="w-5 h-5" />
+                  <span>{item.label}</span>
+                </div>
+                {item.submenu && (
+                  <span className="ml-2">
+                    {isCasesExpanded ? (
+                      <HiChevronDown className="w-4 h-4" />
+                    ) : (
+                      <HiChevronRight className="w-4 h-4" />
+                    )}
+                  </span>
+                )}
+              </button>
+              {/* Submenu */}
+              {item.submenu && isCasesExpanded && (
+                <div className="ml-4 mb-1">
+                  {item.submenu.map((subItem) => {
+                    const SubIcon = subItem.icon
+                    return (
+                      <button
+                        key={subItem.id}
+                        onClick={() => handleSubmenuClick(subItem.id)}
+                        className={`w-full text-left px-4 py-2 rounded transition-colors flex items-center gap-3 ${
+                          active === subItem.id
+                            ? 'text-white'
+                            : 'text-gray-300 hover:text-white'
+                        }`}
+                        style={active === subItem.id ? { backgroundColor: '#2A4A4E' } : {}}
+                      >
+                        <SubIcon className="w-4 h-4" />
+                        {subItem.label}
+                      </button>
+                    )
+                  })}
+                </div>
               )}
-            </button>
-            {/* Submenu */}
-            {item.submenu && isCasesExpanded && (
-              <div className="ml-4 mb-1">
-                {item.submenu.map((subItem) => (
-                  <button
-                    key={subItem.id}
-                    onClick={() => handleSubmenuClick(subItem.id)}
-                    className={`w-full text-left px-4 py-2 rounded transition-colors ${
-                      active === subItem.id
-                        ? 'text-white'
-                        : 'text-gray-300 hover:text-white'
-                    }`}
-                    style={active === subItem.id ? { backgroundColor: '#2A4A4E' } : {}}
-                  >
-                    {subItem.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+            </div>
+          )
+        })}
       </nav>
 
         {/* User Profile Section */}

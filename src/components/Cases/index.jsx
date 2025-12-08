@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Sidebar from '../Sidebar'
 import MobileBottomNav from '../MobileBottomNav'
 import MobileHeader from '../MobileHeader'
+import DesktopHeader from '../DesktopHeader'
 
 function Cases({ onNavigate, onCaseClick, onLogout }) {
   // Default cases (fallback)
@@ -13,6 +14,7 @@ function Cases({ onNavigate, onCaseClick, onLogout }) {
   ]
 
   const [recentCases, setRecentCases] = useState(defaultCases)
+  const [searchQuery, setSearchQuery] = useState('')
 
   // Load cases from localStorage
   const loadCases = () => {
@@ -25,13 +27,19 @@ function Cases({ onNavigate, onCaseClick, onLogout }) {
         const uniqueCases = allCases.filter((caseItem, index, self) =>
           index === self.findIndex((c) => c.id === caseItem.id)
         )
-        setRecentCases(uniqueCases)
+        // Filter out completed cases
+        const activeCases = uniqueCases.filter(caseItem => caseItem.status !== 'Completed')
+        setRecentCases(activeCases)
       } else {
-        setRecentCases(defaultCases)
+        // Filter out completed cases from default cases
+        const activeCases = defaultCases.filter(caseItem => caseItem.status !== 'Completed')
+        setRecentCases(activeCases)
       }
     } catch (error) {
       console.error('Error loading cases from localStorage:', error)
-      setRecentCases(defaultCases)
+      // Filter out completed cases from default cases
+      const activeCases = defaultCases.filter(caseItem => caseItem.status !== 'Completed')
+      setRecentCases(activeCases)
     }
   }
 
@@ -58,15 +66,31 @@ function Cases({ onNavigate, onCaseClick, onLogout }) {
     return { backgroundColor: '#003935', color: 'white' }
   }
 
+  const handleSearch = (query) => {
+    setSearchQuery(query)
+  }
+
+  // Filter cases based on search query
+  const filteredCases = searchQuery.trim() 
+    ? recentCases.filter(caseItem => 
+        caseItem.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        caseItem.applicant.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        caseItem.status.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : recentCases
+
   return (
     <div className="flex min-h-screen overflow-x-hidden w-full" style={{ background: 'linear-gradient(to right, #01151C 0%, #002025 50%, #01151C 100%)' }}>
       <Sidebar activeItem="Cases" onNavigate={onNavigate} onLogout={onLogout} />
       
+      {/* Desktop Header */}
+      <DesktopHeader onLogout={onLogout} onSearch={handleSearch} />
+      
       {/* Mobile Header */}
-      <MobileHeader onLogout={onLogout} />
+      <MobileHeader onLogout={onLogout} onSearch={handleSearch} />
       
       {/* Main Content Area */}
-      <div className="flex-1 p-4 md:p-6 lg:p-8 mt-16 md:mt-0 md:ml-64 pb-20 md:pb-8">
+      <div className="flex-1 p-4 md:p-6 lg:p-8 mt-16 md:mt-16 md:ml-64 pb-20 md:pb-8">
         {/* Header */}
         <div className="mb-4 md:mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
@@ -88,7 +112,10 @@ function Cases({ onNavigate, onCaseClick, onLogout }) {
         <div className="rounded-lg p-4 md:p-6" style={{ backgroundColor: '#01242A' }}>
           {/* Mobile Card View */}
           <div className="md:hidden space-y-3">
-            {recentCases.map((caseItem, index) => (
+            {filteredCases.length === 0 ? (
+              <p className="text-white text-center py-8">No cases found matching your search.</p>
+            ) : (
+              filteredCases.map((caseItem, index) => (
               <div
                 key={index}
                 onClick={() => onCaseClick && onCaseClick(caseItem.id)}
@@ -113,7 +140,8 @@ function Cases({ onNavigate, onCaseClick, onLogout }) {
                   <p className="text-white text-sm">{caseItem.submitted}</p>
                 </div>
               </div>
-            ))}
+              ))
+            )}
           </div>
 
           {/* Desktop Table View */}
@@ -127,7 +155,12 @@ function Cases({ onNavigate, onCaseClick, onLogout }) {
                 </tr>
               </thead>
               <tbody>
-                {recentCases.map((caseItem, index) => (
+                {filteredCases.length === 0 ? (
+                  <tr>
+                    <td colSpan="3" className="py-8 text-center text-white">No cases found matching your search.</td>
+                  </tr>
+                ) : (
+                  filteredCases.map((caseItem, index) => (
                   <tr 
                     key={index} 
                     onClick={() => onCaseClick && onCaseClick(caseItem.id)}
@@ -145,7 +178,8 @@ function Cases({ onNavigate, onCaseClick, onLogout }) {
                       </div>
                     </td>
                   </tr>
-                ))}
+                  ))
+                )}
               </tbody>
             </table>
           </div>

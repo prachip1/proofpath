@@ -1,11 +1,11 @@
-import { HiHome, HiFolder, HiDocumentReport, HiShieldCheck, HiCog, HiPlus } from 'react-icons/hi'
+import { HiHome, HiFolder, HiDocumentReport, HiChartPie, HiCog, HiPlus } from 'react-icons/hi'
 
 function MobileBottomNav({ activeItem, onNavigate }) {
   const navItems = [
     { id: 'Dashboard', icon: HiHome, label: 'Dashboard' },
     { id: 'Cases', icon: HiFolder, label: 'Cases' },
     { id: 'Reports', icon: HiDocumentReport, label: 'Reports' },
-    { id: 'Compliance', icon: HiShieldCheck, label: 'Compliance' },
+    { id: 'Analysis', icon: HiChartPie, label: 'Analysis' },
     { id: 'Settings', icon: HiCog, label: 'Settings' },
   ]
 

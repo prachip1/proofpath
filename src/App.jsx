@@ -5,7 +5,7 @@ import Cases from './components/Cases'
 import CaseDetail from './components/Cases/CaseDetail'
 import NewCase from './components/Cases/NewCase'
 import Reports from './components/broker/Reports'
-import Compliance from './components/broker/Compliance'
+import Analysis from './components/broker/Analysis'
 import Settings from './components/broker/Settings'
 import Customer from './components/Customer'
 import AllImages from './components/allimages'
@@ -92,9 +92,9 @@ function App() {
       case 'NewCase':
         return <NewCase onNavigate={handleNavigate} onLogout={handleLogout} />
       case 'Reports':
-        return <Reports onNavigate={handleNavigate} onLogout={handleLogout} />
-      case 'Compliance':
-        return <Compliance onNavigate={handleNavigate} onLogout={handleLogout} />
+        return <Reports onNavigate={handleNavigate} onCaseClick={handleCaseClick} onLogout={handleLogout} />
+      case 'Analysis':
+        return <Analysis onNavigate={handleNavigate} onLogout={handleLogout} />
       case 'Settings':
         return <Settings onNavigate={handleNavigate} onLogout={handleLogout} />
       default:

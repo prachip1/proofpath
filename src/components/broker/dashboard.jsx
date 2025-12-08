@@ -1,14 +1,34 @@
+import { useState } from 'react'
 import Sidebar from '../Sidebar'
 import MobileBottomNav from '../MobileBottomNav'
 import MobileHeader from '../MobileHeader'
+import DesktopHeader from '../DesktopHeader'
 
 function Dashboard({ onNavigate, onCaseClick, onLogout }) {
-  const recentCases = [
+  const allCases = [
     { id: '#123456', applicant: 'Eleanor Smith', submitted: 'Oct 23, 2023', status: 'Completed' },
     { id: '#123455', applicant: 'Benjamin Brown', submitted: 'Oct 20, 2023', status: 'In review' },
     { id: '#123454', applicant: 'Mohammed Ahmed', submitted: 'Oct 19, 2023', status: 'Pending' },
     { id: '#123453', applicant: 'Sophie Wilson', submitted: 'Oct 18, 2023', status: 'Completed' },
   ]
+  
+  const [searchQuery, setSearchQuery] = useState('')
+  
+  // Filter out completed cases
+  let recentCases = allCases.filter(caseItem => caseItem.status !== 'Completed')
+  
+  // Apply search filter
+  if (searchQuery.trim()) {
+    recentCases = recentCases.filter(caseItem => 
+      caseItem.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      caseItem.applicant.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      caseItem.status.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  }
+  
+  const handleSearch = (query) => {
+    setSearchQuery(query)
+  }
 
   const getStatusBadgeStyle = () => {
     return { backgroundColor: '#003935', color: 'white' }
@@ -18,11 +38,14 @@ function Dashboard({ onNavigate, onCaseClick, onLogout }) {
     <div className="flex min-h-screen overflow-x-hidden w-full" style={{ background: 'linear-gradient(to right, #01151C 0%, #002025 50%, #01151C 100%)' }}>
       <Sidebar activeItem="Dashboard" onNavigate={onNavigate} onLogout={onLogout} />
       
+      {/* Desktop Header */}
+      <DesktopHeader onLogout={onLogout} onSearch={handleSearch} />
+      
       {/* Mobile Header */}
-      <MobileHeader onLogout={onLogout} />
+      <MobileHeader onLogout={onLogout} onSearch={handleSearch} />
       
       {/* Main Content Area */}
-      <div className="flex flex-col mt-8 flex-1 min-w-0 w-full pt-16 md:pt-0 md:ml-64 px-4 md:px-6 lg:px-8 pb-20 md:pb-6 lg:pb-8 overflow-x-hidden">
+      <div className="flex flex-col mt-8 flex-1 min-w-0 w-full pt-16 md:pt-16 md:ml-64 px-4 md:px-6 lg:px-8 pb-20 md:pb-6 lg:pb-8 overflow-x-hidden">
         {/* Header */}
         <div className="mb-4 md:mb-8">
           <h1 className="text-lg md:text-4xl font-bold text-white mb-1 md:mb-2 leading-tight break-words">Portfolio Summary</h1>
